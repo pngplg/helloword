@@ -1,8 +1,122 @@
-<html>
+<!doctype html>
+<html lang="ko">
     <head>
-        <h2>home</h2>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width,initial-scale=1" />
+        <title>Home</title>
+        <style>
+            :root{
+                --nav-height:72px;
+                --nav-radius:42px;
+                --accent:#4f46e5; /* indigo */
+                --muted:#6b7280;
+            }
+            html,body{height:100%;margin:0;font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial}
+            main{min-height:100%;padding:24px;padding-bottom:calc(var(--nav-height) + 32px)}
+
+            /* Bottom navigation */
+            .bottom-nav-wrap{position:fixed;left:0;right:0;bottom:16px;pointer-events:none}
+            .bottom-nav{
+                margin:0 auto;pointer-events:auto;
+                width:calc(100% - 48px);max-width:720px;height:var(--nav-height);
+                background:rgba(255,255,255,0.72);backdrop-filter:blur(8px);
+                border-radius:var(--nav-radius);display:flex;align-items:center;justify-content:space-around;
+                padding:8px 14px;box-shadow:0 8px 30px rgba(2,6,23,0.12);
+                border:1px solid rgba(15,23,42,0.04);
+            }
+            .nav-item{display:flex;flex-direction:column;align-items:center;justify-content:center;text-decoration:none;color:var(--muted);font-size:12px;width:64px;height:56px;border-radius:12px;transition:all .18s ease}
+            .nav-item .icon{display:block;width:28px;height:28px;margin-bottom:4px;display:inline-flex;align-items:center;justify-content:center}
+            .nav-item svg{width:22px;height:22px;stroke:currentColor;fill:none}
+            .nav-item:hover{transform:translateY(-4px);color:var(--accent)}
+            .nav-item:focus{outline:3px solid rgba(79,70,229,0.14);outline-offset:3px;border-radius:10px}
+            .nav-item.active{color:var(--accent);background:linear-gradient(0deg, rgba(79,70,229,0.06), rgba(79,70,229,0.02));}
+
+            /* smaller screens: hide labels */
+            @media (max-width:420px){
+                .nav-item{width:auto}
+                .nav-item .label{display:none}
+            }
+        </style>
     </head>
     <body>
-    <input type="submit" value="Home" />
+        <main>
+            <h2>home</h2>
+            <p>여기에 메인 컨텐츠를 넣으세요.</p>
+        </main>
+
+        <div class="bottom-nav-wrap" aria-hidden="false">
+            <nav class="bottom-nav" role="navigation" aria-label="하단 탐색">
+                <a class="nav-item" href="home.html" data-name="home" aria-label="홈">
+                    <span class="icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M3 11.5L12 4l9 7.5" />
+                            <path d="M5 11.5v7a1 1 0 0 0 1 1h3v-5h6v5h3a1 1 0 0 0 1-1v-7" />
+                        </svg>
+                    </span>
+                    <span class="label">홈</span>
+                </a>
+
+                <a class="nav-item" href="community.html" data-name="search" aria-label="검색/커뮤니티">
+                    <span class="icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="11" cy="11" r="5" />
+                            <path d="M21 21l-4.35-4.35" />
+                        </svg>
+                    </span>
+                    <span class="label">검색</span>
+                </a>
+
+                <a class="nav-item" href="#" data-name="create" aria-label="새로 만들기">
+                    <span class="icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M12 5v14" />
+                            <path d="M5 12h14" />
+                        </svg>
+                    </span>
+                    <span class="label">작성</span>
+                </a>
+
+                <a class="nav-item" href="collection.html" data-name="collection" aria-label="모음">
+                    <span class="icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="3" y="3" width="7" height="7" rx="1" />
+                            <rect x="14" y="3" width="7" height="7" rx="1" />
+                            <rect x="14" y="14" width="7" height="7" rx="1" />
+                            <rect x="3" y="14" width="7" height="7" rx="1" />
+                        </svg>
+                    </span>
+                    <span class="label">모음</span>
+                </a>
+
+                <a class="nav-item" href="profile.html" data-name="profile" aria-label="프로필">
+                    <span class="icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                            <circle cx="12" cy="7" r="4" />
+                        </svg>
+                    </span>
+                    <span class="label">프로필</span>
+                </a>
+            </nav>
+        </div>
+
+        <script>
+            // 현재 경로에 맞춰 active 처리
+            (function(){
+                const items = document.querySelectorAll('.nav-item');
+                const path = location.pathname.split('/').pop() || 'home.html';
+                items.forEach(a=>{
+                    try{
+                        const href = a.getAttribute('href').split('/').pop();
+                        if(href && href !== '#' && href === path) a.classList.add('active');
+                    }catch(e){}
+                    // 클릭 시 간단한 피드백(모바일에서 시각적으로 보임)
+                    a.addEventListener('click', (ev)=>{
+                        items.forEach(x=>x.classList.remove('active'));
+                        a.classList.add('active');
+                    })
+                })
+            })();
+        </script>
     </body>
 </html>
